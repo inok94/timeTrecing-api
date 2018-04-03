@@ -37,20 +37,5 @@ class LoginTest extends TestCase
                 'remember_token',
             ],
         ]);
-        //$payload = ['email' => 'adrian@noreply.com', 'password' => 'secret'];
-
-        /*$this->json('POST', 'api/login', $payload)
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'name',
-                    'email',
-                    'created_at',
-                    'updated_at',
-                    'remember_token',
-                ],
-            ]);*/
-
     }
 }

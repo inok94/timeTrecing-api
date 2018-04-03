@@ -21,7 +21,8 @@ class ProjectController extends Controller
     {
         $time = ProjectEmployee::select('started_work', 'finished_work')->where([['project_id', '=', $id]]);
         if (!$time->exists()) {
-            return abort('404');
+            return
+                abort('404');
         }
 
         $timeArray = $time->get()->toArray();
@@ -32,7 +33,8 @@ class ProjectController extends Controller
         $totalDuration = $finishTime->diffInSeconds($startTime);
 
         $resultTime = gmdate('H:i:s', $totalDuration);
-        return response()->json($resultTime, 200);
+        return
+            response()->json($resultTime, 200);
 
     }
 
@@ -50,12 +52,14 @@ class ProjectController extends Controller
         $countEmployeers = ProjectEmployee::select('employee_id')->distinct()->where([['project_id', '=', $project_id, 'and'],
             ['date', '=', $day]]);
         if (!$countEmployeers->exists()) {
-            return abort('404');
+            return
+                abort('404');
         }
 
         $msg = 'On this day:' . $day . ' worked ' . $countEmployeers->count() . ' person';
 
-        return response()->json($msg, 200);
+        return
+            response()->json($msg, 200);
 
     }
 }

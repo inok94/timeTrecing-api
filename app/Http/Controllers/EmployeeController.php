@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EmployeeСlient;
 use App\ProjectEmployee;
+use App\User;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -23,7 +24,8 @@ class EmployeeController extends Controller
     {
         $data = EmployeeСlient::all();
 
-        return $data;
+        return
+            $data;
     }
 
     /**
@@ -39,9 +41,11 @@ class EmployeeController extends Controller
                                         ->where([['project_employees.project_id','=', $project_id]]);
         //dd($employee->toArray());
         if (!$employee->exists()) {
-            return abort('404');
+            return
+                abort('404');
         }
-        return response()->json($employee->get(),200);
+        return
+            response()->json($employee->get(),200);
     }
 
     /**
@@ -62,8 +66,10 @@ class EmployeeController extends Controller
             ]);
 
         if (!$employeeСlient->exists()) {
-            return abort('404');
+            return
+                abort('404');
         }
+        $this->chekStatusEmployee($employee_id);
 
         $employeeArray = $employeeСlient->get()->toArray();
         $filename = $this->generateCsv($employeeArray);
@@ -72,27 +78,9 @@ class EmployeeController extends Controller
             'Content-Type' => 'text/csv',
         ];
 
-        return response()->download(storage_path($filename), $filename, $headers);
+        return
+            response()->download(storage_path($filename), $filename, $headers);
     }
-
-    /**
-     * When tracking time, consider the project that an employee is currently assigned
-     * @param Request $request
-     * @param $project_id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function currentEmployee(Request $request, $project_id)
-    {
-        dd($project_id);
-        $employeeInProject = ProjectEmployee::select('users.name')->distinct()
-            ->join('users', 'project_employees.employee_id', '=', 'users.user_id')
-            ->where([
-                'project_id', '=', $project_id])->get();
-        dd($employeeInProject);
-        return response()->json($employeeInProject, 200);
-    }
-
-
 
     /**
      * @param array $employeeСlient
@@ -120,6 +108,16 @@ class EmployeeController extends Controller
 
         $writer->save(storage_path($filename));
 
-        return $filename;
+        return
+            $filename;
+    }
+
+    private function chekStatusEmployee($employee_id)
+    {
+        if (EmployeeСlient::select($employee_id)->exists('finished_work') &&
+            ProjectEmployee::select($employee_id)->exists('finished_work')) {
+        }
+        return
+            abort('406');
     }
 }

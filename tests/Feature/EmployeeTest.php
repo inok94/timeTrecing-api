@@ -2,12 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
-use App\EmployeeСlient;
-use App\ProjectEmployee;
-//use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EmployeeTest extends TestCase
 {
@@ -34,6 +30,5 @@ class EmployeeTest extends TestCase
         $project_id = rand(1,4);
         $response = $this->get('/api/current-employee/' . $project_id);
         $response->assertStatus(200);
-        //$response->assertJsonStructure(['data']);
     }
 }
